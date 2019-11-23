@@ -15,9 +15,9 @@ Current progress:
 
 ###### Testing
 
-  - [x] Vectors
-  - [x] Points
-  - [x] Normals
+  - [x] Vectors (revising)
+  - [x] Points (revising)
+  - [x] Normals (revising)
   - [ ] Rays (in progress)
   - [ ] AABBs (in progress)
   - [ ] Transforms
@@ -84,3 +84,11 @@ powerful type system lets us build things with blazing fast structures with very
 flexible code. Usually, you can avoid repeating yourself by establishing a useful
 type hierarchy and dictating behavior through those types. Lots of this was also made
 possible thanks to `StaticArrays.jl`, which creates a neat interface for my use cases.
+
+#### Keep an eye out for performance
+Julia does a pretty great job of handling parameterized code, so I'm making an effort
+to keep type as unambiguous as I build this library. With some work, I think
+I'll be able to make something performant.
+
+Thanks for stopping by! Come back later for a writeup on the process of learning
+Julia through the process of building this library.
