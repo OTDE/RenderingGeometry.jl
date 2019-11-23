@@ -80,7 +80,7 @@ extremely well-suited to the task of making fast, terse code.
 
 #### Generalize where possible
 This happens in more places than you might think, and taking advantage of Julia's
-powerful type system lets us build things with blazing fast structures with very
+powerful type system lets us build blazing fast structures with very
 flexible code. Usually, you can avoid repeating yourself by establishing a useful
 type hierarchy and dictating behavior through those types. Lots of this was also made
 possible thanks to `StaticArrays.jl`, which creates a neat interface for my use cases.
