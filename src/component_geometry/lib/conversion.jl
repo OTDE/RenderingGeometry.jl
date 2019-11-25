@@ -4,7 +4,7 @@ export Vector2, Vector3, Point2, Point3, Normal3, convert
 
 for type ∈ (:Vector2, :Vector3, :Point2, :Point3, :Normal3)
     @eval begin
-        @inline convert(::Type{$(type){T}}, a::$(type){U}) where {T,U<:Number} =
+        @inline Base.convert(::Type{$(type){T}}, a::$(type){U}) where {T,U<:Number} =
             $(type){T}(a)
     end
 end
@@ -21,6 +21,9 @@ Vector2(x::Number, y::Number) = Vector2(promote(x, y))
 
 Point2(x::T, y::T) where T<:Number = Point2{T}(x, y, z)
 Point2(x::Number, y::Number) = Point2{T}(promote(x, y, z))
+
+as_vector(::Type{Point2{T}}) where T<:Number = Vector2{T}
+as_vector(::Type{Point3{T}}) where T<:Number = Vector3{T}
 
 @inline Vector3(p::Point3{T}) where T<:Number = Vector3{T}(p)
 

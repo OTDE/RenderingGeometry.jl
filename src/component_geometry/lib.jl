@@ -1,8 +1,3 @@
-import Base:
-    +, *, -, /, ==, √,
-    isnan, abs, floor, ceil, min, max,
-    convert, promote_rule, show
-
 include("lib/component_types.jl")
 include("lib/cartesian_pair.jl")
 include("lib/cartesian_triple.jl")

@@ -11,7 +11,7 @@ name(x::Type{Nrm}) = "Normal"
 promote_rule(::Type{T}, ::Type{Pnt}) where T<:VecLike = T
 
 abstract type CartesianTuple{N, T<:Number, U<:ComponentType} <:FieldVector{N, T} end
-VectorLike{N, T<:Number} = CartesianTuple{N, T, U} where U<:VecLike
+VectorLike{N, T<:Number} = CartesianTuple{N,T,U} where U<:VecLike
 
 CVector{N, T<:Number} = CartesianTuple{N, T, Vec}
 Point{N, T<:Number} = CartesianTuple{N, T, Pnt}

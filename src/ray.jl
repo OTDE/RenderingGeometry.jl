@@ -1,18 +1,18 @@
-export Ray, scale_differentials, point_at
+export Ray, point_at
+# TODO: make this generic like the vec/point/norm library
+struct Ray{T<:AbstractFloat}
+    o::Point3{T}
+    d::Vector3{T}
+    time::T
 
-struct Ray
-    o::Point3d
-    d::Vector3d
-    time::Float64
+    Ray{T}(o, d, time) where T<:AbstractFloat = new{T}(o, d, time)
 
-    Ray(o, d, time) where T<:Number = new(o, d, time)
-
-    Ray() = new(Point3d(), Vector3d(), 0.0)
+    Ray() = new{Float64}(Point3d(), Vector3d(), 0.0)
 end
 
-scale_differentials((ray, rₓ, rᵧ)::NTuple{3,Ray}, s::T) where T<:Real =
-    (ray,
-    Ray(ray.o + (rₓ.o - o) * s, ray.d + (rₓ.d - d) * s),
-    Ray(ray.o + (rᵧ.o - o) * s, ray.d + (rᵧ.d - d) * s))
+Ray(o::Point3{T}, d::Vector3{T}, time::T) where T<:AbstractFloat = Ray{T}(o, d, time)
 
-point_at(r::Ray, t::T) where T<:Real = r.o + r.d * t
+Ray(o::Point3{T}, d::Vector3{U}, time::V) where {T<:AbstractFloat, U<:AbstractFloat, V<:AbstractFloat} =
+    Ray{promote_type(T, U, V)}(o, d, time)
+
+Base.:|>(t::T, r::Ray{U}) where {T<:Number, U<:AbstractFloat} = r.o + r.d * t
