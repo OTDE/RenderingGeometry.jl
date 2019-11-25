@@ -7,7 +7,7 @@ struct Ray{T<:AbstractFloat}
 
     Ray{T}(o, d, time) where T<:AbstractFloat = new{T}(o, d, time)
 
-    Ray() = new{Float64}(Point3d(), Vector3d(), 0.0)
+    Ray{T}() where T<:AbstractFloat = new{T}(Point3{T}(), Vector3{T}(), 0.0)
 end
 
 Ray(o::Point3{T}, d::Vector3{T}, time::T) where T<:AbstractFloat = Ray{T}(o, d, time)

@@ -21,5 +21,5 @@ export -, distance², distance, floor, ceil, min, max, lerp, permute
 
 @inline permute(a::Point{3,T}, (x, y, z)) where T<:Number = typeof(a)(a[x], a[y], a[z])
 
-@inline Base.:-(a::Point{N,T}, b::Point{N,U}) where {T<:Number, U<:Number} =
+@inline Base.:-(a::Point{N,T}, b::Point{N,U}) where {N,T<:Number, U<:Number} =
     as_vector(promote_type(typeof(a), typeof(b)))(a .- b)

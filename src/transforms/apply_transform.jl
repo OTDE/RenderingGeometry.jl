@@ -33,6 +33,6 @@ function Base.:|>(t::Transform{T}, b::Bounds{N,U}) where {N,T<:AbstractFloat, U<
             t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,4)] .* b.p_min,
             t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,4)] .* b.p_max)),
         sum(max.(
-                t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,4)] .* b.p_min,
-                t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,4)] .* b.p_max)))
+            t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,4)] .* b.p_min,
+            t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,4)] .* b.p_max)))
 end

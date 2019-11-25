@@ -111,3 +111,21 @@ Base.*(t::Transform{T}, u::Transform{U}) where {T<:AbstractFloat} =
 
 swaps_handedness(t::Transform{T}) where T<:AbstractFloat =
     det(t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,3)]) < 0.0
+
+function Transform(q::Quaternion{T}) where T<:AbstractFloat
+    m = SMatrix{4,4,T}(
+        1 - 2 * (q.v.y * q.v.y + q.v.z * q.v.z),
+        2 * (q.v.x * q.v.y + q.w * q.v.z),
+        2 * (q.v.x * q.v.z - q.w * q.v.y),
+        0.0,
+        2 * (q.v.x * q.v.y - q.w * q.v.z),
+        1 - 2 * (q.v.x * q.v.x + q.v.z * q.v.z),
+        2 * (q.v.y * q.v.z + q.w * q.v.x),
+        0.0,
+        2 * (q.v.x * q.v.z + q.w * q.v.y),
+        2 * (q.v.y * q.v.z - q.w * q.v.x),
+        1 - 2 * (q.v.x * q.v.x + q.v.y * q.v.y),
+        0.0,
+        0.0, 0.0, 0.0, 1.0)
+    Transform{T}(m, transpose(m))
+end
