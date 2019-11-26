@@ -67,6 +67,8 @@ Base.promote_rule(::Type{CartesianTriple{S,U}}, ::Type{CartesianTriple{T,U}}) wh
 Base.promote_rule(::Type{CartesianTriple{S,U}}, ::Type{T}) where {S<:Number, T<:Number, U<:ComponentType} =
     CartesianTriple{promote_type(S,T),U}
 
+Base.promote_rule(::Type{Normal3{T}}, ::Type{Vector3{U}}) = Vector3{promote_type(T,U)}
+
 """
     Core 3D types
 
