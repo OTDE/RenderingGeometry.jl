@@ -2,23 +2,20 @@ export +, -, *, /, ==, abs, convert
 
 # General operations on Cartesian Tuples.
 
-@inline Base.:+(a::CartesianTuple{N,S,U}, b::CartesianTuple{N,T,U}) where
-                {S<:Number, T<:Number, U<:ComponentType, N} = promote_type(typeof(a), typeof(b))(a .+ b)
+@inline Base.:+(a::CartesianTuple, b::CartesianTuple) = promote_type(typeof(a), typeof(b))(a .+ b)
 
-@inline Base.:-(a::VectorLike{N,S}, b::VectorLike{N,T}) where
-                {S<:Number, T<:Number, N} = promote_type(typeof(a), typeof(b))(a .- b)
+@inline Base.:-(a::VectorLike, b::VectorLike) = promote_type(typeof(a), typeof(b))(a .- b)
 
-@inline function Base.:*(a::CartesianTuple{N,S,U}, b::T) where {S<:Number, T<:Number, U<:ComponentType, N}
+@inline function Base.:*(a::CartesianTuple, b::Number)
                 @assert !isnan(b)
                 promote_type(typeof(a), typeof(b))(a .* b)
         end
 
-@inline Base.:*(a::T, b::CartesianTuple{N,S,U}) where
-                {S<:Number, T<:Number, U<:ComponentType, N} = b * a
+@inline Base.:*(a::Number, b::CartesianTuple) = b * a
 
-@inline function Base.:/(a::CartesianTuple{N,S,U}, b::T) where {S<:Number, T<:Number, U<:ComponentType, N}
-                @assert b != zero(T)
-                inverse = one(S) / b
+@inline function Base.:/(a::CartesianTuple, b::Number)
+                @assert b != zero(typeof(b))
+                inverse = one(eltype(a)) / b
                 a * inverse
         end
 
@@ -28,9 +25,9 @@ export +, -, *, /, ==, abs, convert
 @inline Base.:(==)(a::CartesianTuple{N,S,U}, b::CartesianTuple{N,T,V}) where
                 {S<:Number, T<:Number, U<:ComponentType, V<:ComponentType, N} = false
 
-@inline Base.abs(a::CartesianTuple{N,T,U}) where {N, T<:Number, U<:ComponentType} = typeof(a)(abs.(a))
+@inline Base.abs(a::CartesianTuple) = typeof(a)(abs.(a))
 
-@inline Base.:-(a::CartesianTuple{N,T,U}) where {N, T<:Number, U<:ComponentType} = typeof(a)((-).(a))
+@inline Base.:-(a::CartesianTuple) = typeof(a)((-).(a))
 
 @inline Base.convert(::Type{CartesianTuple{N,S,U}}, a::CartesianTuple{N,T,U}) where {S<:Number, T<:Number, U<:ComponentType, N} =
                 promote_type(typeof(a), S)(a)

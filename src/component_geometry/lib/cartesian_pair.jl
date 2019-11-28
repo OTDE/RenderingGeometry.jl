@@ -6,7 +6,8 @@ show
 """
     CartesianPair
 
-Define an ordered pair in two-dimensional Cartesian space.
+Define an ordered pair in two-dimensional Cartesian space. Used as the
+default implementation when another isn't provided by the user.
 
 Use the fields to describe the positive or negative distance
 along both the x and y axis.
@@ -17,22 +18,22 @@ struct CartesianPair{T<:Number, U<:ComponentType} <:CartesianTuple{2, T, U}
     x::T
     y::T
 
-    function CartesianPair{T,U}(x, y) where {T<:Number, U<:ComponentType}
+    function CartesianPair{T,U}(x, y) where {T,U}
         @assert !isnan(x) && !isnan(y)
         new{T,U}(x, y)
     end
 
-    function CartesianPair{T,U}((x, y)::NTuple{2, S}) where {S<:Number, T<:Number, U<:ComponentType}
+    function CartesianPair{T,U}((x, y)::NTuple{2, S}) where {S<:Number,T,U}
         @assert !isnan(x) && !isnan(y)
         new{T,U}(x, y)
     end
 
-    function CartesianPair{T,U}(a::S) where {S<:Number, T<:Number, U<:ComponentType}
+    function CartesianPair{T,U}(a::S) where {S<:Number,T,U}
         @assert !isnan(a)
         new{T,U}(a, a)
     end
 
-    function CartesianPair{T,U}() where {T<:Number, U<:ComponentType}
+    function CartesianPair{T,U}() where {T,U}
         new{T,U}(0, 0)
     end
 
@@ -41,28 +42,28 @@ end
 """
     Typed Cartesian pairs
 
-Use as a base for the public-facing 2D aliases.
+Use as a base for the public-facing default 2D implementation.
 
 """
 Vector2{T<:Number} = CartesianPair{T, Vec}
 Point2{T<:Number} = CartesianPair{T, Pnt}
 
-Base.promote_rule(::Type{Point2{T}}, ::Type{Vector2{U}}) where {T<:Number, U<:Number} =
+Base.promote_rule(::Type{Point2{T}}, ::Type{Vector2{U}}) where {T,U} =
     Point2{promote_type(T,U)}
 
-Base.promote_rule(::Type{CartesianPair{S,U}}, ::Type{CartesianPair{T, U}}) where {S<:Number, T<:Number, U<:ComponentType} =
+Base.promote_rule(::Type{CartesianPair{S,U}}, ::Type{CartesianPair{T, U}}) where {S,T,U} =
         CartesianPair{promote_type(S, T), U}
 
-Base.promote_rule(::Type{CartesianPair{S,U}}, ::Type{T}) where {S<:Number, T<:Number, U<:ComponentType} =
+Base.promote_rule(::Type{CartesianPair{T,U}}, ::Type{S}) where {S<:Number,T,U} =
         CartesianPair{promote_type(S, T), U}
 
-Base.show(io::IO, a::CartesianPair{T,U}) where {T<:Number, U<:ComponentType} =
+Base.show(io::IO, a::CartesianPair{T,U}) where {T,U} =
     print("2-dimensional $(name(u)) with $T vertices: ($(a.x), $(a.y))")
 
 """
     Core 2D types
 
-Use as the basis for Vector and Point-based math in 2D.
+Use as the default cartesian types.
 
 """
 const Vector2i = Vector2{Int}

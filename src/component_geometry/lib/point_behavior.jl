@@ -2,15 +2,15 @@ export -, distance², distance, floor, ceil, min, max, lerp, permute
 
 # Point functions.
 
-@inline distance²(p::Point{N,T}, q::Point{N,U}) where {T<:Number, U<:Number, N} = magnitude²(p - q)
+@inline distance²(p::Point{N,T}, q::Point{N,U}) where {N,T,U} = magnitude²(p - q)
 
-@inline distance(p::Point{N,T}, q::Point{N,U}) where {T<:Number, U<:Number, N} = magnitude(p - q)
+@inline distance(p::Point{N,T}, q::Point{N,U}) where {N,T,U} = magnitude(p - q)
 
-@inline Base.floor(p::Point{N,T}) where {T<:Number, N} = typeof(p)(floor.(p))
+@inline Base.floor(p::Point{N,T}) where {N,T} = typeof(p)(floor.(p))
 
-@inline Base.ceil(p::Point{N,T}) where {T<:Number, N} = typeof(p)(ceil.(p))
+@inline Base.ceil(p::Point{N,T}) where {N,T} = typeof(p)(ceil.(p))
 
-@inline Base.min(a::Point{N,T}, b::Point{N,U}) where {T<:Number, U<:Number, N} =
+@inline Base.min(a::Point{N,T}, b::Point{N,U}) where {N,T,U} =
             promote_type(typeof(a), typeof(b))(min.(a, b))
 
 @inline Base.max(a::Point{N,T}, b::Point{N,U}) where {T<:Number, U<:Number, N} =

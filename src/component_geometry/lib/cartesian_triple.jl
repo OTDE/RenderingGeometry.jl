@@ -58,16 +58,15 @@ Vec3Like{T<:Real} = CartesianTriple{T, U} where U<:VecLike
 
 # These let us define some generic operations on tuples while retaining type aliasing.
 
-Base.promote_rule(::Type{Point3{T}}, ::Type{Vector3{U}}) where {T<:Number, U<:Number} =
-    Point3{promote_type(T,U)}
+Base.promote_rule(::Type{Point3{T}}, ::Type{Vector3{U}}) where {T,U} = Point3{promote_type(T,U)}
 
-Base.promote_rule(::Type{CartesianTriple{S,U}}, ::Type{CartesianTriple{T,U}}) where {S<:Number, T<:Number, U<:ComponentType} =
+Base.promote_rule(::Type{CartesianTriple{S,U}}, ::Type{CartesianTriple{T,U}}) where {S,T,U} =
     CartesianTriple{promote_type(S,T),U}
 
-Base.promote_rule(::Type{CartesianTriple{S,U}}, ::Type{T}) where {S<:Number, T<:Number, U<:ComponentType} =
+Base.promote_rule(::Type{CartesianTriple{S,U}}, ::Type{T}) where {S,T,U} =
     CartesianTriple{promote_type(S,T),U}
 
-Base.promote_rule(::Type{Normal3{T}}, ::Type{Vector3{U}}) = Vector3{promote_type(T,U)}
+Base.promote_rule(::Type{Normal3{T}}, ::Type{Vector3{U}}) where {T,U} = Vector3{promote_type(T,U)}
 
 """
     Core 3D types
