@@ -1,36 +1,34 @@
-export ⋅, absdot, magnitude², magnitude, normalize, min, max, ×,
-coordinate_system_from, permute, face_forward
+export ⋅, absdot, magnitude², magnitude, normalize,
+×, coordinate_system_from, permute, face_forward
 
 # General functions for VectorLikes.
 
-@inline ⋅(u::VectorLike{N,T}, v::VectorLike{N,U}) where {T<:Number, U<:Number, N} = sum(u .* v)
+@inline ⋅(u::VectorLike, v::VectorLike) = sum(u.coordinates .* v.coordinates)
 
-@inline absdot(u::VectorLike{N,T}, v::VectorLike{N,U}) where {T<:Number, U<:Number, N} = abs(u ⋅ v)
+@inline absdot(u::VectorLike, v::VectorLike) = abs(u ⋅ v)
 
-@inline magnitude²(v::VectorLike{N,T}) where {T<:Number, N} = v ⋅ v
+@inline magnitude²(v::VectorLike) = v ⋅ v
 
-@inline magnitude(v::VectorLike{N,T}) where {T<:Number, N} = √(magnitude²(v))
+@inline magnitude(v::VectorLike) = √(magnitude²(v))
 
-@inline normalize(v::VectorLike{N,T}) where {T<:Number, N} = v / magnitude(v)
+@inline normalize(v::VectorLike) = v / magnitude(v)
 
-@inline Base.min(a::CVector{N,T}, b::CVector{N,U}) where {T<:Number, U<:Number, N} =
-            promote_type(typeof(a), typeof(b))(min.(a, b))
+@inline Base.min(a::Vect{N,T}, b::Vect{N,U}) where {N,T,U} = promote_type(typeof(a), typeof(b))(min.(a.coordinates, b.coordinates)...)
 
-@inline Base.max(a::CVector{N,T}, b::CVector{N,U}) where {T<:Number, U<:Number, N} =
-            promote_type(typeof(a), typeof(b))(max.(a, b))
+@inline Base.max(a::Vect{N,T}, b::Vect{N,U}) where {N,T,U} = promote_type(typeof(a), typeof(b))(max.(a.coordinates, b.coordinates)...)
 
 # Vector3-specific functions.
 
-@inline ×(a::VectorLike{3,T}, b::VectorLike{3,U}) where {T<:Number, U<:Number} =
-        promote_type(typeof(a), typeof(b))(
+@inline ×(a::VectorLike{3,T}, b::VectorLike{3,U}) where {T,U} =
+        Vector3{promote_type(T,U)}(
             a.y * b.z - a.z * b.y,
             a.z * b.x - a.x * b.z,
             a.x * b.y - a.y * b.x)
 
-@inline face_forward(u::VectorLike{3,T}, v::VectorLike{3,U}) where {T<:Number, U<:Number} =
-        u ⋅ v < 0.0 ? -u : u
+@inline face_forward(u::VectorLike{3,T}, v::VectorLike{3,U}) where {T,U} =
+        u ⋅ v < zero(promote_type(T,U)) ? -u : u
 
-@inline function coordinate_system_from(v₁::CVector{3,T}) where T<:Number
+@inline function coordinate_system_from(v₁::Vector3{T}) where T
     if abs(v₁.x) > abs(v₁.y)
         v₂ = typeof(v₁)(-v₁.z, 0.0, v₁.x) / √(v₁.x * v₁.x + v₁.z * v₁.z)
     else
@@ -39,4 +37,4 @@ coordinate_system_from, permute, face_forward
     v₁, v₂, v₁ × v₂
 end
 
-@inline permute(a::CVector{3,T}, (x, y, z)) where T<:Number = typeof(a)(a[x], a[y], a[z])
+@inline permute(a::Vector3{T}, (x, y, z)) where T = typeof(a)(a[x], a[y], a[z])

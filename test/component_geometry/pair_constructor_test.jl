@@ -1,33 +1,11 @@
 using Test
-include("definitions.jl")
-include("../../test_logging.jl")
 
-pair_legal_monads = [[a] for a ∈ (0, 1, -1, 0.0, 4, -4, 500000000, -500000000, 847658787.834, -847658787.834, 2.568368, -2.568368)]
-pair_illegal_monads = [[a] for a ∈ (NaN16, NaN32, NaN64)]
+pair_legal_monads = (0, 1, -1, 4, -4, 500000000, -500000000, 847658787.834, -847658787.834, 2.568368, -2.568368)
+pair_illegal_monads = (NaN16, NaN32, NaN64)
 
 
-pair_legal_dyads = [vcat(x, y) for x = pair_legal_monads, y = pair_legal_monads]
-pair_illegal_dyads = [vcat(x, y) for x = pair_illegal_monads, y = pair_legal_monads]
-
-is_noninteger(a) = isa(a, AbstractFloat) && a != round(a, digits=0)
-
-function any_are_noninteger(args)
-    for arg in args
-        if is_noninteger(arg)
-            return true
-        end
-    end
-    return false
-end
-
-function any_isnan(args)
-    for arg in args
-        if typeof(arg)<:AbstractFloat && isnan(arg)
-            return true
-        end
-    end
-    return false
-end
+pair_legal_dyads = [(x, y) for x = pair_legal_monads, y = pair_legal_monads]
+pair_illegal_dyads = [(x, y) for x = pair_illegal_monads, y = pair_legal_monads]
 
 function test_one_pair_constructor(type::Type, args=[0.0])
     secondindex = length(args) < 2 ? 1 : 2
@@ -43,7 +21,7 @@ end
 
 function test_pair_constructor_cases_with(type, legal_args, illegal_args)
     @testset "with legal input: $arg" for arg ∈ legal_args
-        if type <: IntegerPair && any_are_noninteger(arg)
+        if eltype(type) == Int && !all(isa.(arg, Int))
             @eval begin
                 @test_throws InexactError $type($(arg)...)
             end
@@ -54,9 +32,15 @@ function test_pair_constructor_cases_with(type, legal_args, illegal_args)
 
 
     @testset "with illegal input: $arg" for arg ∈ illegal_args
-        if any_isnan(arg)
-            @eval begin
-                @test_throws AssertionError $type($(arg)...)
+        if any(isnan.(arg))
+            if eltype(type) == Int
+                @eval begin
+                    @test_throws InexactError $type($(arg)...)
+                end
+            else
+                @eval begin
+                    @test_throws AssertionError $type($(arg)...)
+                end
             end
         else
             @eval begin
@@ -66,7 +50,7 @@ function test_pair_constructor_cases_with(type, legal_args, illegal_args)
     end
 
     @testset "with irrational input" begin
-        if type <: IntegerPair
+        if eltype(type) == Int
             @eval begin
                 @test_throws MethodError $type(π)
             end

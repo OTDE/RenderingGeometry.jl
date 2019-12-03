@@ -6,8 +6,8 @@ using RenderingGeometry
 
 Use for cycling through tests common to certain types.
 """
-const pair_types = (Vector2i, Vector2f, Vector2d, Point2i, Point2f, Point2d)
-const pair_symbols = (:Vector2i, :Vector2f, :Vector2d, :Point2i, :Point2f, :Point2d)
+const pair_types = (Vector2i, Vector2s, Vector2d, Point2i, Point2s, Point2d)
+const pair_symbols = (:Vector2i, :Vector2s, :Vector2d, :Point2i, :Point2s, :Point2d)
 pair_type_iterable = zip(pair_types, pair_symbols)
 
 const pair_int_types = (pair_types[1], pair_types[3])
@@ -27,11 +27,11 @@ const pair_point_symbols = pair_symbols[4:end]
 pair_point_iterable = zip(pair_point_types, pair_point_symbols)
 
 IntegerPair = Union{Vector2i, Point2i}
-FloatPair = Union{Vector2f, Point2f}
+FloatPair = Union{Vector2s, Point2s}
 DoublePair = Union{Vector2d, Point2d}
 
-VectorPair = Union{Vector2i, Vector2f, Vector2d}
-PointPair = Union{Point2i, Point2f, Point2d}
+VectorPair = Union{Vector2i, Vector2s, Vector2d}
+PointPair = Union{Point2i, Point2s, Point2d}
 
 function generate_set(type::Type)
     vcat([type(), type(rand(-5000:1:5000, 1)...)], [type(rand(-5000:1:5000, 2)...) for i in 1:2])

@@ -1,5 +1,5 @@
 export inv, transpose, translate, scale, has_scale,
-rotate_x, rotate_y, rotate_z, rotate, look_at, *, swaps_handedness
+rotate_x, rotate_y, rotate_z, rotate, look_at, swaps_handedness
 
 Base.inv(t::Transform{T}) where T<:AbstractFloat = Transform{T}(t.m_inv, t.m)
 
@@ -106,11 +106,9 @@ function look_at(📷::Point{3,T}, at::Point{3,U}, up::Vector{3,V}) where {T<:Ab
     Transform(inv(m), m)
 end
 
-Base.*(t::Transform{T}, u::Transform{U}) where {T<:AbstractFloat} =
-    Transform{promote_type(T,U)}(t.m * u.m, u.m_inv * t.m_inv)
+Base.:(*)(t::Transform{T}, u::Transform{U}) where T = Transform{promote_type(T,U)}(t.m * u.m, u.m_inv * t.m_inv)
 
-swaps_handedness(t::Transform{T}) where T<:AbstractFloat =
-    det(t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,3)]) < 0.0
+swaps_handedness(t::Transform{T}) where T = det(t.m[StaticArrays.SUnitRange(1,3), StaticArrays.SUnitRange(1,3)]) < zero(T)
 
 function Transform(q::Quaternion{T}) where T<:AbstractFloat
     m = SMatrix{4,4,T}(

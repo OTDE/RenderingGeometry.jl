@@ -1,7 +1,5 @@
 using Test
 using RenderingGeometry
-include("definitions.jl")
-include("../../test_logging.jl")
 
 function test_precision_conversion(type₁, type₂)
     @eval begin
@@ -18,7 +16,7 @@ end
 function test_type_casting(type₁, type₂)
     @eval begin
         dataset = generate_set($type₁)
-        converted_dataset = [$type₂(pair) for pair ∈ dataset]
+        converted_dataset = [convert($type₂, pair) for pair ∈ dataset]
         for (pair₁, pair₂) ∈ zip(dataset, converted_dataset)
             @test typeof(pair₂) <: $type₂
             for (index₁, index₂) ∈ zip(pair₁, pair₂)

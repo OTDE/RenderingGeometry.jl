@@ -1,9 +1,6 @@
 using Test
 using RenderingGeometry
 
-include("definitions.jl")
-include("../../test_logging.jl")
-
 componentwise_ops = (:+, :-)
 scalar_ops = (:*, :/)
 unary_ops = (:-, abs)

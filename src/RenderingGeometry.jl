@@ -1,5 +1,6 @@
 module RenderingGeometry
     using StaticArrays
+    using Rematch
     include("utils.jl")
     include("component_geometry/lib.jl")
     include("ray.jl")
